@@ -1,0 +1,217 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+Refer to covid_death_age_gender. 1. Set up a hypothesis about ‘age group’ and ‘covid-19 deaths’. Undergo the process of hypothesis testing.Also 2. Set up a hypothesis about ‘sex’ and ‘covid-19 deaths’
+
+```{r}
+data<-read.csv(file.choose(), header = TRUE)
+```
+
+```{r}
+df <- data
+df1 <- subset( df, State == "United States" )
+df1 <- subset(df1, Sex!="All Sexes")
+df1 <- subset(df1, Age.group!="0-17 years")
+df1 <- subset(df1, Age.group!="18-29 years")
+df1 <- subset(df1, Age.group!="30-49 years")
+df1 <- subset(df1, Age.group!="50-64 years")
+df2 = data.frame(df1$ Age.group, df1$ COVID.19.Deaths, df1$ Sex)
+
+print(df2)
+
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ Age.group, y= df1$ COVID.19.Deaths, fill=df1$ Sex)) + geom_bar(stat="identity", position="dodge")+ theme_bw() + labs(title="United States", x="Age Groups", y="Covid-19 Deaths")
+```
+
+```{r}
+df1 <- subset( df, State == "United States" )
+df1 <- subset(df1, Sex!="All Sexes")
+df1 <- subset(df1, Age.group!="Under 1 year")
+df1 <- subset(df1, Age.group!="1-4 years")
+df1 <- subset(df1, Age.group!="5-14 years")
+df1 <- subset(df1, Age.group!="15-24 years")
+df1 <- subset(df1, Age.group!="25-34 years")
+df1 <- subset(df1, Age.group!="35-44 years")
+df1 <- subset(df1, Age.group!="45-54 years")
+df1 <- subset(df1, Age.group!="55-64 years")
+df2 = data.frame(df1$ Age.group, df1$ COVID.19.Deaths, df1$ Sex)
+
+#print(df2)
+
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ Age.group, y= df1$ COVID.19.Deaths, fill=df1$ Sex)) + geom_bar(stat="identity", position="dodge")+ theme_bw() + labs(title="United States", x="Age Groups", y="Covid-19 Deaths")
+```
+
+1a.Statement:
+H0-The means of Aged people and non aged people dying due to covid 19 is equal.
+Ha-The means of Aged people and non aged people dying due to covid 19 is not equal.
+
+```{r}
+df1 <- subset( df, Sex!="All Sexes" )
+df1 <- subset( df1, Age.group!="All Ages" )
+df1 <- subset(df1, Age.group!="Under 1 year")
+df1 <- subset(df1, Age.group!="0-17 years")
+df1 <- subset(df1, Age.group!="18-29 years")
+df1 <- subset(df1, Age.group!="30-49 years")
+df1 <- subset(df1, Age.group!="50-64 years")
+df1 <- subset( df1, State!="United States" )
+
+df2 = data.frame(df1$State, df1$ COVID.19.Deaths, df1$Age.group )
+
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ COVID.19.Deaths, y= df1$ State, fill=df1$ Age.group)) + geom_bar(stat="identity") + theme_bw() + labs(title="States of USA", x="Deaths", y="States")
+
+aged <- df1[df1$Age.group == "65-74 years" | df1$Age.group == "75-84 years" | df1$Age.group == "85 years and over", ]
+nonaged <- df1[df1$Age.group != "65-74 years" & df1$Age.group != "75-84 years" & df1$Age.group != "85 years and over", ]
+#head(aged)
+#head(nonaged)
+
+t.test(nonaged$COVID.19.Deaths, aged$COVID.19.Deaths)
+```
+Null hypothesis for alpha = 0.05 can be rejected
+
+1b.Statement:
+H0-The means of Aged people and non aged people dying due to covid 19 is equal.
+Ha-The means of Aged people and non aged people dying due to covid 19 is not equal.
+```{r}
+df1 <- subset( df, Sex!="All Sexes" )
+df1 <- subset( df1, Age.group!="All Ages" )
+df1 <- subset(df1, Age.group!="Under 1 year")
+df1 <- subset(df1, Age.group!="1-4 years")
+df1 <- subset(df1, Age.group!="5-14 years")
+df1 <- subset(df1, Age.group!="15-24 years")
+df1 <- subset(df1, Age.group!="25-34 years")
+df1 <- subset(df1, Age.group!="35-44 years")
+df1 <- subset(df1, Age.group!="45-54 years")
+df1 <- subset(df1, Age.group!="55-64 years")
+df1 <- subset( df1, State!="United States" )
+
+df2 = data.frame(df1$State, df1$ COVID.19.Deaths, df1$Age.group )
+
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ COVID.19.Deaths, y= df1$ State, fill=df1$ Age.group)) + geom_bar(stat="identity") + theme_bw() + labs(title="States of USA", x="Deaths", y="States")
+
+aged <- df1[df1$Age.group == "65-74 years" | df1$Age.group == "75-84 years" | df1$Age.group == "85 years and over", ]
+nonaged <- df1[df1$Age.group != "65-74 years" & df1$Age.group != "75-84 years" & df1$Age.group != "85 years and over", ]
+#head(aged)
+#head(nonaged)
+
+t.test(nonaged$COVID.19.Deaths, aged$COVID.19.Deaths)
+```
+Null hypothesis for alpha = 0.05 can be rejected
+
+
+```{r}
+df1 <- subset( df, State == "United States" )
+df1 <- subset(df1, Age.group == "All Ages")
+df1 <- subset( df1, Sex!= "All Sexes" )
+
+df2 = data.frame(df1$ COVID.19.Deaths, df1$ Sex)
+#print(df2)
+
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ Sex, y= df1$ COVID.19.Deaths)) + geom_bar(stat="identity") + theme_bw() + labs(title="United States", x="Sex", y="Covid-19 Deaths")
+```
+
+2.Statement:
+H0-The means of Males and Females dying due to covid 19 is equal.
+Ha-The means of Males and Females dying due to covid 19 is not equal.
+```{r}
+df1 <- subset( df, Age.group == "All Ages" )
+df1 <- subset( df, State!= "United States" )
+df1 <- subset( df1, Sex!= "All Sexes" )
+
+
+df2 = data.frame(df1$State, df1$ COVID.19.Deaths, df1$Age.group, df1$Sex )
+#print(df2)
+
+library(ggplot2)
+
+ggplot(df2, aes(x=df1$ COVID.19.Deaths, y= df1$ State, fill=df1$ Sex)) + geom_bar(stat="identity") + theme_bw() + labs(title="States of USA", x="Deaths", y="States")
+
+male <- subset(df1, Sex== "Male")
+female <- subset(df1, Sex== "Female")
+t.test(male$COVID.19.Deaths, female$COVID.19.Deaths, conf.level = 0.95, var.equal = TRUE)
+```
+Null hypothesis for alpha = 0.05 can not be rejected
+
+
+3.Statement: H0 - Average no. Of covid 19 deaths per day in age group 45-54 is 400
+           Ha - Average no. Of covid 19 deaths per day in age group 45-54 is less than what it is claimed
+           
+```{r}
+d1<-data.frame(data$Age.group[data$Age.group=="45-54 years"], data$COVID.19.Deaths[data$Age.group=="45-54 years"])
+colnames(d1) <- c("age_group", "covid19deaths")
+d1<-na.omit(d1)
+```
+
+
+```{r}
+x_bar <- mean(d1$covid19deaths, na.rm=TRUE)
+cat("Sample mean xbar",x_bar,"\n")
+
+std <- sd(d1$covid19deaths, na.rm=TRUE)
+cat("Standard deviationr",std,"\n")
+
+n<-nrow(d1)
+mue <- 400
+
+SE <- std/sqrt(n)
+cat("Standard Error",SE,"\n")
+
+Z <- (x_bar-mue)/SE
+cat("Zee Scorer",Z,"\n")
+
+p<-pnorm(Z,0,1,lower.tail = TRUE)
+cat("value of distribution",p,"\n")
+```
+
+Null hypothesis for alpha = 0.05 can be rejected
+
+
+
+
+4.Statement: H0 - Average no. Of covid 19 deaths per day in Males is 700
+           Ha - Average no. Of covid 19 deaths per day in Males is less than what it is claimed
+
+```{r}
+d2<-data.frame(data$Sex[data$Sex=="Male"], data$COVID.19.Deaths[data$Sex=="Male"])
+colnames(d2) <- c("Sex", "covid19deaths")
+d2<-na.omit(d2)
+```
+
+```{r}
+x_bar <- mean(d2$covid19deaths, na.rm=TRUE)
+cat("Sample mean xbar",x_bar,"\n")
+
+std <- sd(d2$covid19deaths, na.rm=TRUE)
+cat("Standard deviationr",std,"\n")
+
+n<-nrow(d2)
+mue <- 700
+
+SE <- std/sqrt(n)
+cat("Standard Error",SE,"\n")
+
+Z <- (x_bar-mue)/SE
+cat("Zee Scorer",Z,"\n")
+
+p<-pnorm(Z,0,1,lower.tail = TRUE)
+cat("value of distribution",p,"\n")
+```
+
+Null hypothesis for alpha = 0.05 can not be rejected
